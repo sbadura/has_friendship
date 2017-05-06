@@ -2,7 +2,7 @@ module HasFriendship
   class Friendship < ActiveRecord::Base
 
     after_create do
-      friend.on_friendship_created(self) if friend.respond_to?("on_friendship_created")
+      friend.on_friendship_created(self)
     end
 
     enum status: { pending: 0, requested: 1, accepted: 2, blocked: 3 } do
@@ -10,7 +10,7 @@ module HasFriendship
         transition [:pending, :requested] => :accepted
 
         after do
-          friendable.on_friendship_accepted(self) if friendable.respond_to?("on_friendship_accepted")
+          friendable.on_friendship_accepted(self)
         end
       end
 
@@ -20,7 +20,7 @@ module HasFriendship
         end
 
         after do
-          friendable.on_friendship_blocked(self) if friendable.respond_to?("on_friendship_blocked")
+          friendable.on_friendship_blocked(self)
         end
         transition all - [:blocked] => :blocked
       end
